@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="TaskTrackerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Projects">
+    <Key>
+      <PropertyRef Name="ProjectId" />
+    </Key>
+    <Property Name="ProjectId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="RegistrationDate" Type="DateTime" Precision="7" />
+    <Property Name="CreaterUserId" Type="Int32" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="UserProfiles" Relationship="Self.FK_Projects_UserProfiles" FromRole="Projects" ToRole="UserProfiles" />
+    <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheets_Projects" FromRole="Projects" ToRole="Timesheets" />
+    <NavigationProperty Name="UserProfiles1" Relationship="Self.UserToProject" FromRole="Projects" ToRole="UserProfiles" />
+  </EntityType>
+  <EntityType Name="Timesheets">
+    <Key>
+      <PropertyRef Name="TimesheetId" />
+    </Key>
+    <Property Name="TimesheetId" Type="Int32" Nullable="false" />
+    <Property Name="Date" Type="DateTime" Precision="7" />
+    <Property Name="Time" Type="Int32" Nullable="false" />
+    <Property Name="ProjectId" Type="Int32" Nullable="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="DayOfWeek" Type="Int32" Nullable="false" />
+    <Property Name="Status" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_Timesheets_Projects" FromRole="Timesheets" ToRole="Projects" />
+    <NavigationProperty Name="UserProfiles" Relationship="Self.FK_Timesheets_UserProfiles" FromRole="Timesheets" ToRole="UserProfiles" />
+  </EntityType>
+  <EntityType Name="UserProfiles">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="BirthDate" Type="DateTime" Precision="7" />
+    <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+    <Property Name="IsDeleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Projects" Relationship="Self.FK_Projects_UserProfiles" FromRole="UserProfiles" ToRole="Projects" />
+    <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheets_UserProfiles" FromRole="UserProfiles" ToRole="Timesheets" />
+    <NavigationProperty Name="Projects1" Relationship="Self.UserToProject" FromRole="UserProfiles" ToRole="Projects" />
+    <NavigationProperty Name="UserAuthData" Relationship="TaskTrackerModel.FK_UserAuthData_UserProfiles" FromRole="UserProfiles" ToRole="UserAuthData" />
+  </EntityType>
+  <Association Name="FK_Projects_UserProfiles">
+    <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+    <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfiles">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Projects">
+        <PropertyRef Name="CreaterUserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Timesheets_Projects">
+    <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+    <End Role="Timesheets" Type="Self.Timesheets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="ProjectId" />
+      </Principal>
+      <Dependent Role="Timesheets">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Timesheets_UserProfiles">
+    <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+    <End Role="Timesheets" Type="Self.Timesheets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfiles">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Timesheets">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="UserToProject">
+    <End Role="Projects" Type="Self.Projects" Multiplicity="*" />
+    <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="TaskTrackerEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Projects" EntityType="Self.Projects" />
+    <EntitySet Name="Timesheets" EntityType="Self.Timesheets" />
+    <EntitySet Name="UserProfiles" EntityType="Self.UserProfiles" />
+    <AssociationSet Name="FK_Projects_UserProfiles" Association="Self.FK_Projects_UserProfiles">
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+      <End Role="Projects" EntitySet="Projects" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Timesheets_Projects" Association="Self.FK_Timesheets_Projects">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="Timesheets" EntitySet="Timesheets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Timesheets_UserProfiles" Association="Self.FK_Timesheets_UserProfiles">
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+      <End Role="Timesheets" EntitySet="Timesheets" />
+    </AssociationSet>
+    <AssociationSet Name="UserToProject" Association="Self.UserToProject">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+    </AssociationSet>
+    <EntitySet Name="UserAuthData" EntityType="TaskTrackerModel.UserAuthData" />
+    <AssociationSet Name="FK_UserAuthData_UserProfiles" Association="TaskTrackerModel.FK_UserAuthData_UserProfiles">
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+      <End Role="UserAuthData" EntitySet="UserAuthData" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="UserAuthData">
+    <Key>
+      <PropertyRef Name="UserId" />
+    </Key>
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="UserProfiles" Relationship="TaskTrackerModel.FK_UserAuthData_UserProfiles" FromRole="UserAuthData" ToRole="UserProfiles" />
+    <Property Name="Apikey" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+  </EntityType>
+  <Association Name="FK_UserAuthData_UserProfiles">
+    <End Type="TaskTrackerModel.UserProfiles" Role="UserProfiles" Multiplicity="1" />
+    <End Type="TaskTrackerModel.UserAuthData" Role="UserAuthData" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfiles">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="UserAuthData">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

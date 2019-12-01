@@ -1,0 +1,15 @@
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\TrackerLib.dll.config
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\TrackerLib.dll
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\TrackerLib.pdb
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\EntityFramework.dll
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\EntityFramework.SqlServer.dll
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\EntityFramework.xml
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\EntityFramework.SqlServer.xml
+C:\taskTraker\TaskTrackerBack\TrackerLib\obj\Debug\TrackerLib.csprojAssemblyReference.cache
+C:\taskTraker\TaskTrackerBack\TrackerLib\obj\Debug\TrackerLib.csproj.CoreCompileInputs.cache
+C:\taskTraker\TaskTrackerBack\TrackerLib\obj\Debug\TrackerLib.csproj.CopyComplete
+C:\taskTraker\TaskTrackerBack\TrackerLib\obj\Debug\TrackerLib.dll
+C:\taskTraker\TaskTrackerBack\TrackerLib\obj\Debug\TrackerLib.pdb
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\Enums.NET.dll
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\Enums.NET.pdb
+C:\taskTraker\TaskTrackerBack\TrackerLib\bin\Debug\Enums.NET.xml
