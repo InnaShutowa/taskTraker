@@ -9,7 +9,7 @@
     float: left;
 }
 
-.main{
+.main_fon{
     margin-top: 10px;
     padding-left: 15%;
     padding-right: 15%;
@@ -25,6 +25,6 @@
 
 .inline_element{
     float: left;
-    padding-right: 10%;
+    padding-left: 10%;
     width: 200px;
 }

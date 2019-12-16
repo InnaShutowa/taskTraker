@@ -2,11 +2,12 @@ import React, {useState} from 'react';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Button from 'react-bootstrap/Button'
 import * as css from "./Styles.css";
-import CreateUserModal from '../CreateUserModal/CreateUserModal';
+import CreateUserModal from '../CreateUserModal';
 
 
 const users = [
     {
+        id:1,
         firstName:"Inna",
         lastName:"Shutova",
         dateRegistration:"12.12.12",
@@ -14,6 +15,7 @@ const users = [
         email: "i.schutova@nordclan.com"
     },
     {
+        id: 2,
         firstName:"Natalia",
         lastName:"Myasnikova",
         dateRegistration:"12.12.12",
@@ -26,7 +28,7 @@ const Users = () => {
     const [show, setShow] = useState(false);
 
 
-    return <div className="main">
+    return <div className="main_fon">
         <div className="inline_block">
             <div className="text_title">Пользователи: </div>
             <Button className="button_padding" variant="outline-primary">Выгрузить статистику</Button>

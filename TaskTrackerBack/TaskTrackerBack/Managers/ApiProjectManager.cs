@@ -5,12 +5,14 @@ using System.Web;
 using TaskTrackerBack.Models;
 using TaskTrackerBack.Models.InputModels;
 using TaskTrackerBack.Models.OutputModels;
+using TrackerLib;
 using TrackerLib.Enums;
 using TrackerLib.Managers;
+using TrackerLib.Models.InputModels;
 
 namespace TaskTrackerBack.Managers {
-    public class ApiProjectManager {
-        public ResultModel GetProjectsList() {
+    public static class ApiProjectManager {
+        public static ResultModel GetProjectsList() {
             try {
 
                 return new ResultModel();
@@ -20,7 +22,7 @@ namespace TaskTrackerBack.Managers {
             }
         }
 
-        public ResultModel GetProjectInfo() {
+        public static ResultModel GetProjectInfo() {
             try {
 
                 return new ResultModel();
@@ -31,7 +33,7 @@ namespace TaskTrackerBack.Managers {
         /// <summary>
         /// создаем проект
         /// </summary>
-        public ResultModel CreateProject(ApiCreateProjectModel model) {
+        public static ResultModel CreateProject(ApiCreateProjectModel model) {
             try {
                 if (string.IsNullOrEmpty(model.Apikey)) {
                     return new ResultModel(StatusCodeEnum.ApikeyIsEmpty);
@@ -40,14 +42,19 @@ namespace TaskTrackerBack.Managers {
                 if (user.StatusCode != StatusCodeEnum.Success) {
                     return new ResultModel(user);
                 }
-               // var createdProject =
-                return new ResultModel();
+                var createdProject = ProjectManager.CreateProject(
+                    new InternalCreateProjectModel(model.ProjectName, 
+                    model.Description, 
+                    ((UserProfiles)user.Data).UserId));
+
+
+                return new ResultModel(createdProject);
             } catch (Exception ex) {
                 return new ResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
 
-        public ResultModel DeleteProject() {
+        public static ResultModel DeleteProject() {
             try {
 
                 return new ResultModel();
