@@ -15,8 +15,8 @@ namespace TaskTrackerBack
 
             routes.MapRoute(
                 name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new { action = "Index", id = UrlParameter.Optional }
+                url: "{controller}/{id}",
+                defaults: new {id = UrlParameter.Optional }
             );
         }
     }

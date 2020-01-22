@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskTrackerBack", "TaskTrac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackerLib", "TrackerLib\TrackerLib.csproj", "{41015531-EC08-42C0-9273-479AF2323651}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerApi", "..\..\Users\Инна\source\repos\ServerApi\ServerApi\ServerApi.csproj", "{DB403566-4432-410F-9F38-D92EAA070C36}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,11 +23,15 @@ Global
 		{41015531-EC08-42C0-9273-479AF2323651}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41015531-EC08-42C0-9273-479AF2323651}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41015531-EC08-42C0-9273-479AF2323651}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB403566-4432-410F-9F38-D92EAA070C36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB403566-4432-410F-9F38-D92EAA070C36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB403566-4432-410F-9F38-D92EAA070C36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB403566-4432-410F-9F38-D92EAA070C36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {26A12C73-10C0-4090-B2EB-F7E6BD41D326}
+		SolutionGuid = {FE061D5B-79FD-4366-8342-D643BFBF1DA6}
 	EndGlobalSection
 EndGlobal

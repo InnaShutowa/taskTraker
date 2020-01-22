@@ -41,7 +41,8 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="FirstName" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="LastName" Type="nvarchar" MaxLength="150" Nullable="false" />
           <Property Name="BirthDate" Type="datetime2" Precision="7" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -206,7 +207,6 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="BirthDate" Type="DateTime" Precision="7" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
@@ -216,6 +216,8 @@
           <NavigationProperty Name="Timesheets" Relationship="Self.FK_Timesheets_UserProfiles" FromRole="UserProfiles" ToRole="Timesheets" />
           <NavigationProperty Name="UserAuthData" Relationship="Self.FK_UserAuthData_UserProfiles" FromRole="UserProfiles" ToRole="UserAuthData" />
           <NavigationProperty Name="UserToProjects" Relationship="Self.FK_UserToProjects_UserProfiles" FromRole="UserProfiles" ToRole="UserToProjects" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="UserToProjects">
           <Key>
@@ -374,8 +376,9 @@
           <EntitySetMapping Name="UserProfiles">
             <EntityTypeMapping TypeName="TaskTrackerModel.UserProfiles">
               <MappingFragment StoreEntitySet="UserProfiles">
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="Phone" ColumnName="Phone" />

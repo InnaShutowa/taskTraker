@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackerLib.Enums;
 using TrackerLib.Models;
+using TrackerLib.Models.InputModels;
 
 namespace TrackerLib.Managers {
     /// <summary>
@@ -37,8 +38,8 @@ namespace TrackerLib.Managers {
         /// <summary>
         /// добавляем инфу о пользователе в проекте
         /// </summary>
-        public static InternalResultModel CreateUserToProjectModel(int userId, 
-                            int projectId, 
+        public static InternalResultModel CreateUserToProjectModel(int userId,
+                            int projectId,
                             bool isOwner) {
             try {
                 using (var db = new TaskTrackerEntities()) {
@@ -65,15 +66,36 @@ namespace TrackerLib.Managers {
         /// <summary>
         /// добавляем инфу по пользователю
         /// </summary>
-        public static InternalResultModel CreateUserModel() {
+        public static InternalResultModel CreateUserModel(InternalCreateUserAccModel model,
+            string apikey,
+            string passwordHash) {
             try {
                 using (var db = new TaskTrackerEntities()) {
+                    var newUser = new UserProfiles() {
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        BirthDate = model.BirthDate,
+                        IsAdmin = model.IsAdmin,
+                        IsDeleted = false,
+                        Email = model.Email,
+                        Phone = model.Phone
+                    };
 
+                    db.UserProfiles.Add(newUser);
+
+                    var newAuthData = new UserAuthData() {
+                        UserId = newUser.UserId,
+                        PasswordHash = passwordHash,
+                        Apikey = apikey
+                    };
+
+                    db.UserAuthData.Add(newAuthData);
+                    db.SaveChanges();
+                    return new InternalResultModel(StatusCodeEnum.Success);
                 }
             } catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
-            return null;
         }
         /// <summary>
         /// добавляем инфу о пользовательских авторизационных данных

@@ -65,6 +65,7 @@
     <Compile Include="Managers\CommonWorkWithDbManager.cs" />
     <Compile Include="Managers\ProjectManager.cs" />
     <Compile Include="Managers\UserInProjectManager.cs" />
+    <Compile Include="Managers\UserManager.cs" />
     <Compile Include="Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -81,6 +82,9 @@
       <DependentUpon>Model.edmx</DependentUpon>
     </Compile>
     <Compile Include="Models\InputModels\InternalCreateProjectModel.cs" />
+    <Compile Include="Models\InputModels\InternalCreateUserAccModel.cs" />
+    <Compile Include="Models\InternalModels\InternalCreatePassModel.cs" />
+    <Compile Include="Models\OutputModels\InternalProjectModel.cs" />
     <Compile Include="Models\OutputModels\InternalResultModel.cs" />
     <Compile Include="Models\OutputModels\InternalUserModel.cs" />
     <Compile Include="Projects.cs">
@@ -125,6 +129,12 @@
       <DependentUpon>Model.edmx</DependentUpon>
       <LastGenOutput>Model.cs</LastGenOutput>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Users\Инна\source\repos\ServerApi\ServerApi\ServerApi.csproj">
+      <Project>{DB403566-4432-410F-9F38-D92EAA070C36}</Project>
+      <Name>ServerApi</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

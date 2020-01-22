@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TrackerLib.Enums;
 using TrackerLib.Models;
@@ -6,6 +7,34 @@ using TrackerLib.Models.InputModels;
 
 namespace TrackerLib.Managers {
     public static class ProjectManager {
+        /// <summary>
+        /// получаем список данных по всем проектам для пользователя
+        /// </summary>
+        public static InternalResultModel GetProjectsList(int userId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
+                    if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+
+                    var allProjects = db.UserToProjects
+                        .Where(a => a.UserId == userId)
+                        .OrderByDescending(a=>a.IsOwner)
+                        .Select(a=>a.Projects)
+                        .ToList();
+
+                    var data = new List<InternalProjectModel>();
+
+                    allProjects.ForEach(a => {
+                        data.Add(new InternalProjectModel(db, a));
+                    });
+
+                    return new InternalResultModel(StatusCodeEnum.Success, data);
+                }
+            } catch (Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+
         /// <summary>
         /// создаем новый проект
         /// </summary>

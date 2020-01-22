@@ -4,6 +4,7 @@ import Button from 'react-bootstrap/Button';
 import CreateProjectModal from '../CreateProjectModal';
 import * as css from "./StylesProject.css";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import projectsActions from '../../store/Actions'
 // with es6
 import '../../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 

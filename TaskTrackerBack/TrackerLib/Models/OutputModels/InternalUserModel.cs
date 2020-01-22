@@ -14,7 +14,6 @@ namespace TrackerLib.Models {
         public InternalUserModel(TaskTrackerEntities db, UserProfiles data) {
             if (data == null) return;
             UserId = data.UserId;
-            FullName = data.FullName;
             Email = data.Email;
             Phone = data.Phone;
             BirthDate = data.BirthDate;
@@ -22,7 +21,6 @@ namespace TrackerLib.Models {
         }
 
         public int UserId { get; set; }
-        public string FullName { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public DateTime? BirthDate { get; set; }

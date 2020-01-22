@@ -11,6 +11,8 @@ namespace TrackerLib.Enums {
         [Description("Error! Input data is incorrect.")]
         InputDataIsWrong = 503,
         [Description("Error! Project already deleted.")]
-        ProjectAlreadyDeleted = 504
+        ProjectAlreadyDeleted = 504,
+        [Description("Error! Email already used.")]
+        EmailAlreadyUsed = 505
     }
 }

@@ -12,9 +12,19 @@ using TrackerLib.Models.InputModels;
 
 namespace TaskTrackerBack.Managers {
     public static class ApiProjectManager {
-        public static ResultModel GetProjectsList() {
+        /// <summary>
+        /// запрос на получение списка проектов
+        /// </summary>
+        /// <returns></returns>
+        public static ResultModel GetProjectsList(string apikey) {
             try {
-
+                if (string.IsNullOrEmpty(apikey)) {
+                    return new ResultModel(StatusCodeEnum.ApikeyIsEmpty);
+                }
+                var user = CommonManager.GetUserDataByApikey(apikey);
+                if (user.StatusCode != StatusCodeEnum.Success) {
+                    return new ResultModel(user);
+                }
                 return new ResultModel();
             }
             catch (Exception ex) {

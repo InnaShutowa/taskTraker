@@ -38,8 +38,9 @@
     <EntitySetMapping Name="UserProfiles">
       <EntityTypeMapping TypeName="TaskTrackerModel.UserProfiles">
         <MappingFragment StoreEntitySet="UserProfiles">
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="FullName" ColumnName="FullName" />
           <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
@@ -48,13 +49,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="UserToProject" TypeName="TaskTrackerModel.UserToProject" StoreEntitySet="UserToProject">
-      <EndProperty Name="Projects">
-        <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-      </EndProperty>
-      <EndProperty Name="UserProfiles">
-        <ScalarProperty Name="UserId" ColumnName="UserId" />
-      </EndProperty>
-    </AssociationSetMapping>
+    <EntitySetMapping Name="UserToProjects">
+      <EntityTypeMapping TypeName="TaskTrackerModel.UserToProjects">
+        <MappingFragment StoreEntitySet="UserToProjects">
+          <ScalarProperty Name="UserToProjectsId" ColumnName="UserToProjectsId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="IsOwner" ColumnName="IsOwner" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
   </EntityContainerMapping>
 </Mapping>

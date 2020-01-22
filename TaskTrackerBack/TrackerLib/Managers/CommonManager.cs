@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TrackerLib.Enums;
 using TrackerLib.Models;
+using TrackerLib.Models.InternalModels;
 
 namespace TrackerLib.Managers {
     public static class CommonManager {
@@ -30,6 +31,44 @@ namespace TrackerLib.Managers {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
+        /// <summary>
+        /// генерируем апикей bли пароль
+        /// </summary>
+        public static string GetRandomString(int count) {
+            try {
+                var rand = new Random();
+                var result = "";
+                var buff = 0;
+                while (buff < count) {
+                    var num = rand.Next(48, 122);
+                    if (num > 48 && num < 57 ||
+                        num > 92 && num < 97) continue;
+                    result += (char) num;
+                    buff++;
+                }
+                return result;
+            } catch (Exception ex) {
+                return "";
+            }
+        }
 
+        /// <summary>
+        /// генерируем апикей
+        /// </summary>
+        //public static InternalCreatePassModel CreatePasswordForUser() {
+        //    try {
+        //        var rand = new Random();
+        //        var result = "";
+        //        var buff = 0;
+        //        while (buff < 15) {
+        //            var num = rand.Next(60, 122);
+        //            result += (char)num;
+        //            buff++;
+        //        }
+        //        return result;
+        //    } catch (Exception ex) {
+        //        return "";
+        //    }
+        //}
     }
 }
