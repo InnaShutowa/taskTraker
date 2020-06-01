@@ -20,16 +20,18 @@ namespace TrackerLib
             this.Projects = new HashSet<Projects>();
             this.Timesheets = new HashSet<Timesheets>();
             this.UserToProjects = new HashSet<UserToProjects>();
+            this.Tasks = new HashSet<Tasks>();
+            this.Tasks1 = new HashSet<Tasks>();
         }
     
         public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
         public Nullable<System.DateTime> BirthDate { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsDeleted { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Projects> Projects { get; set; }
@@ -38,5 +40,9 @@ namespace TrackerLib
         public virtual UserAuthData UserAuthData { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserToProjects> UserToProjects { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tasks> Tasks { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tasks> Tasks1 { get; set; }
     }
 }

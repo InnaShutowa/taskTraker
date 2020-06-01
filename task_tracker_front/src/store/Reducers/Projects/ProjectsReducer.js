@@ -8,27 +8,28 @@ let initialState = {
             countUsers: 10,
             creator: "Барабашка"
         }
-    ]
+    ],
+    IsRequested: false
 };
 
 function ProjectsReducer(state = initialState, action) {
 
-    if (handlers[action.type]){
-        return handlers[action.type].handler(state, action);
+    if (handlers[action.type]) {
+        let s = handlers[action.type].handler(state, action);
     }
     return state;
 }
 
 
-const handlers  = {
-    "PROJECTS_REQUEST" : {
-         handler(state, action){
-            return {...state};
+const handlers = {
+    "PROJECTS_REQUEST": {
+        handler(state, action) {
+            return { ...state };
         }
     },
-    "PROJECTS_SAVE_DATA" : {
-        hander(state, action) {
-            return {projects: action};
+    "PROJECTS_SAVE_DATA": {
+        handler(state, action) {
+            return { projects: action.data, IsRequested: true };
         }
     }
 };

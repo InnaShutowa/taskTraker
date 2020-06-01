@@ -1,7 +1,9 @@
 import projectsActions from './Projects';
+import usersActions from './Users';
 
 const ActionTypes = {
-    projectsActions: projectsActions
+    projectsActions: projectsActions,
+    userActions: usersActions
 };
 
 

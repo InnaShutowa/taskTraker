@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="TaskTrackerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="Хранилище TaskTrackerModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="Projects">
     <Key>
       <PropertyRef Name="ProjectId" />
@@ -11,17 +11,32 @@
     <Property Name="Description" Type="ntext" />
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
   </EntityType>
+  <EntityType Name="Tasks">
+    <Key>
+      <PropertyRef Name="TaskId" />
+    </Key>
+    <Property Name="TaskId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Description" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateCreate" Type="datetime2" Precision="7" Nullable="false" />
+    <Property Name="DeadlineDeta" Type="datetime2" Precision="7" />
+    <Property Name="DateFinished" Type="datetime2" Precision="7" />
+    <Property Name="UserId" Type="int" />
+    <Property Name="CreaterId" Type="int" Nullable="false" />
+    <Property Name="TaskStatus" Type="int" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+  </EntityType>
   <EntityType Name="Timesheets">
     <Key>
       <PropertyRef Name="TimesheetId" />
     </Key>
-    <Property Name="TimesheetId" Type="int" Nullable="false" />
+    <Property Name="TimesheetId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="datetime2" Precision="7" />
     <Property Name="Time" Type="int" Nullable="false" />
     <Property Name="ProjectId" Type="int" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
-    <Property Name="DayOfWeek" Type="int" Nullable="false" />
-    <Property Name="Status" Type="int" Nullable="false" />
+    <Property Name="TaskId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="UserAuthData">
     <Key>
@@ -36,20 +51,22 @@
       <PropertyRef Name="UserId" />
     </Key>
     <Property Name="UserId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="FullName" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="150" Nullable="false" />
     <Property Name="BirthDate" Type="datetime2" Precision="7" />
     <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Phone" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="IsAdmin" Type="bit" Nullable="false" />
     <Property Name="IsDeleted" Type="bit" Nullable="false" />
   </EntityType>
-  <EntityType Name="UserToProject">
+  <EntityType Name="UserToProjects">
     <Key>
-      <PropertyRef Name="UserId" />
-      <PropertyRef Name="ProjectId" />
+      <PropertyRef Name="UserToProjectsId" />
     </Key>
+    <Property Name="UserToProjectsId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="UserId" Type="int" Nullable="false" />
     <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="IsOwner" Type="bit" Nullable="false" />
   </EntityType>
   <Association Name="FK_Projects_UserProfiles">
     <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
@@ -63,6 +80,42 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_Tasks_Projects">
+    <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
+    <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Projects">
+        <PropertyRef Name="ProjectId" />
+      </Principal>
+      <Dependent Role="Tasks">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tasks_Tasks">
+    <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
+    <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfiles">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Tasks">
+        <PropertyRef Name="CreaterId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Tasks_UserProfiles">
+    <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="0..1" />
+    <End Role="Tasks" Type="Self.Tasks" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="UserProfiles">
+        <PropertyRef Name="UserId" />
+      </Principal>
+      <Dependent Role="Tasks">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_Timesheets_Projects">
     <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
     <End Role="Timesheets" Type="Self.Timesheets" Multiplicity="*" />
@@ -72,6 +125,18 @@
       </Principal>
       <Dependent Role="Timesheets">
         <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Timesheets_Tasks">
+    <End Role="Tasks" Type="Self.Tasks" Multiplicity="1" />
+    <End Role="Timesheets" Type="Self.Timesheets" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Tasks">
+        <PropertyRef Name="TaskId" />
+      </Principal>
+      <Dependent Role="Timesheets">
+        <PropertyRef Name="TaskId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -99,42 +164,59 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserToProject_Projects">
+  <Association Name="FK_UserToProjects_Projects">
     <End Role="Projects" Type="Self.Projects" Multiplicity="1" />
-    <End Role="UserToProject" Type="Self.UserToProject" Multiplicity="*" />
+    <End Role="UserToProjects" Type="Self.UserToProjects" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Projects">
         <PropertyRef Name="ProjectId" />
       </Principal>
-      <Dependent Role="UserToProject">
+      <Dependent Role="UserToProjects">
         <PropertyRef Name="ProjectId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_UserToProject_UserProfiles">
+  <Association Name="FK_UserToProjects_UserProfiles">
     <End Role="UserProfiles" Type="Self.UserProfiles" Multiplicity="1" />
-    <End Role="UserToProject" Type="Self.UserToProject" Multiplicity="*" />
+    <End Role="UserToProjects" Type="Self.UserToProjects" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="UserProfiles">
         <PropertyRef Name="UserId" />
       </Principal>
-      <Dependent Role="UserToProject">
+      <Dependent Role="UserToProjects">
         <PropertyRef Name="UserId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="TaskTrackerModelStoreContainer">
+  <EntityContainer Name="Хранилище TaskTrackerModelContainer">
     <EntitySet Name="Projects" EntityType="Self.Projects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Tasks" EntityType="Self.Tasks" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Timesheets" EntityType="Self.Timesheets" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserAuthData" EntityType="Self.UserAuthData" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="UserProfiles" EntityType="Self.UserProfiles" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="UserToProject" EntityType="Self.UserToProject" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="UserToProjects" EntityType="Self.UserToProjects" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_Projects_UserProfiles" Association="Self.FK_Projects_UserProfiles">
       <End Role="UserProfiles" EntitySet="UserProfiles" />
       <End Role="Projects" EntitySet="Projects" />
     </AssociationSet>
+    <AssociationSet Name="FK_Tasks_Projects" Association="Self.FK_Tasks_Projects">
+      <End Role="Projects" EntitySet="Projects" />
+      <End Role="Tasks" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tasks_Tasks" Association="Self.FK_Tasks_Tasks">
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+      <End Role="Tasks" EntitySet="Tasks" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Tasks_UserProfiles" Association="Self.FK_Tasks_UserProfiles">
+      <End Role="UserProfiles" EntitySet="UserProfiles" />
+      <End Role="Tasks" EntitySet="Tasks" />
+    </AssociationSet>
     <AssociationSet Name="FK_Timesheets_Projects" Association="Self.FK_Timesheets_Projects">
       <End Role="Projects" EntitySet="Projects" />
+      <End Role="Timesheets" EntitySet="Timesheets" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Timesheets_Tasks" Association="Self.FK_Timesheets_Tasks">
+      <End Role="Tasks" EntitySet="Tasks" />
       <End Role="Timesheets" EntitySet="Timesheets" />
     </AssociationSet>
     <AssociationSet Name="FK_Timesheets_UserProfiles" Association="Self.FK_Timesheets_UserProfiles">
@@ -145,13 +227,13 @@
       <End Role="UserProfiles" EntitySet="UserProfiles" />
       <End Role="UserAuthData" EntitySet="UserAuthData" />
     </AssociationSet>
-    <AssociationSet Name="FK_UserToProject_Projects" Association="Self.FK_UserToProject_Projects">
+    <AssociationSet Name="FK_UserToProjects_Projects" Association="Self.FK_UserToProjects_Projects">
       <End Role="Projects" EntitySet="Projects" />
-      <End Role="UserToProject" EntitySet="UserToProject" />
+      <End Role="UserToProjects" EntitySet="UserToProjects" />
     </AssociationSet>
-    <AssociationSet Name="FK_UserToProject_UserProfiles" Association="Self.FK_UserToProject_UserProfiles">
+    <AssociationSet Name="FK_UserToProjects_UserProfiles" Association="Self.FK_UserToProjects_UserProfiles">
       <End Role="UserProfiles" EntitySet="UserProfiles" />
-      <End Role="UserToProject" EntitySet="UserToProject" />
+      <End Role="UserToProjects" EntitySet="UserToProjects" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

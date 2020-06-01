@@ -8,6 +8,31 @@ using TrackerLib.Models.InputModels;
 namespace TrackerLib.Managers {
     public static class ProjectManager {
         /// <summary>
+        /// получаем список активных пользователей, которых можно добавить в проект
+        /// </summary>
+        /// <returns></returns>
+        public static InternalResultModel GetUserToAddInProjectList(int projectId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var project = db.Projects.FirstOrDefault(a => a.ProjectId == projectId && !a.IsDeleted); 
+                    if (project == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    var users = db.UserProfiles
+                        .Where(a => !a.UserToProjects
+                        .Any(w => w.UserId == a.UserId
+                        && w.ProjectId == projectId) && !a.IsDeleted).ToList();
+                    var result = new List<InternalUserModel>();
+                    users.ForEach(user =>
+                    {
+                        result.Add(new InternalUserModel(db, user));
+                    });
+                    return new InternalResultModel(StatusCodeEnum.Success, result);
+                }
+            } catch(Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+
+        /// <summary>
         /// получаем список данных по всем проектам для пользователя
         /// </summary>
         public static InternalResultModel GetProjectsList(int userId) {
@@ -16,21 +41,55 @@ namespace TrackerLib.Managers {
                     var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
                     if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
 
-                    var allProjects = db.UserToProjects
-                        .Where(a => a.UserId == userId)
-                        .OrderByDescending(a=>a.IsOwner)
-                        .Select(a=>a.Projects)
+                    var allProj = db
+                        .Projects.Where(a => !a.IsDeleted)
+                        .ToList();
+
+                    var projectForUser = allProj
+                        .Where(a => 
+                            a.UserToProjects
+                                .Any(w => 
+                                    w.UserId == userId))
                         .ToList();
 
                     var data = new List<InternalProjectModel>();
+                    if (user.IsAdmin)
+                    {
+                        allProj.ForEach(a =>
+                        {
+                            data.Add(new InternalProjectModel(db, a));
+                        });
+                    }
+                    else
+                    {
+                        projectForUser.ForEach(a =>
+                        {
+                            data.Add(new InternalProjectModel(db, a));
+                        });
+                    }
 
-                    allProjects.ForEach(a => {
-                        data.Add(new InternalProjectModel(db, a));
-                    });
+                    
 
                     return new InternalResultModel(StatusCodeEnum.Success, data);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+        /// <summary>
+        /// получаем подробную информацию по проекту
+        /// </summary>
+        public static InternalResultModel GetProjectInfoModel(int projectId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var project = db.Projects.FirstOrDefault(a => a.ProjectId == projectId && !a.IsDeleted);
+                    if (project == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    var result = new InternalProjectModel(db, project);
+                    return new InternalResultModel(StatusCodeEnum.Success, result);
+                }
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
@@ -58,7 +117,8 @@ namespace TrackerLib.Managers {
                     }
                     return new InternalResultModel(StatusCodeEnum.Success);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
@@ -68,16 +128,60 @@ namespace TrackerLib.Managers {
         public static InternalResultModel DeleteProject(int projectId, int userId) {
             try {
                 using (var db = new TaskTrackerEntities()) {
-                    var userToProject = db.UserToProjects.FirstOrDefault(a =>
-                        a.UserId == userId && a.ProjectId == projectId && a.IsOwner);
-                    if (userToProject == null)
+                    var proj = db.Projects.FirstOrDefault(a => a.ProjectId == projectId);
+                    if (proj == null)
                         return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
-                    if (userToProject.Projects.IsDeleted)
-                        return new InternalResultModel(StatusCodeEnum.ProjectAlreadyDeleted);
-                    userToProject.Projects.IsDeleted = true;
+                    if (proj.IsDeleted)
+                        return new InternalResultModel(StatusCodeEnum.DataAlreadyDeleted);
+                    proj.IsDeleted = true;
+                    db.SaveChanges();
                     return new InternalResultModel(StatusCodeEnum.Success);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// добавляем пользователя в проект
+        /// </summary>
+        public static InternalResultModel AddUserInProject(int userId, int projectId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
+                    if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    var project = db.Projects.FirstOrDefault(a => a.ProjectId == projectId && !a.IsDeleted);
+                    if (project == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    if (project.UserToProjects.Any(a => a.UserId == userId)) return null;
+
+                    var result = CommonWorkWithDbManager.CreateUserToProjectModel(userId, projectId, false);
+                    return result;
+                }
+            }
+            catch (Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+
+        /// <summary>
+        /// удаляем пользователя из проекта
+        /// </summary>
+        public static InternalResultModel DeleteUserFromProject(int userId, int projectId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
+                    if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    var project = db.Projects.FirstOrDefault(a => a.ProjectId == projectId && !a.IsDeleted);
+                    if (project == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    var userInProject = db.UserToProjects.FirstOrDefault(a => a.UserId == userId && a.ProjectId == projectId);
+                    if (userInProject == null) return new InternalResultModel(StatusCodeEnum.UserAlreadyInProject);
+
+                    db.UserToProjects.Remove(userInProject);
+                    db.SaveChanges();
+                    return new InternalResultModel(StatusCodeEnum.Success);
+                }
+            } catch(Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }

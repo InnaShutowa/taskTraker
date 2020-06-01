@@ -1,5 +1,4 @@
-﻿using ServerApi.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -16,15 +15,23 @@ namespace TrackerLib.Managers {
         /// </summary>
         public static InternalResultModel CreateUserAcc(InternalCreateUserAccModel model) {
             try {
+                if (string.IsNullOrEmpty(model.Email) ||
+                       string.IsNullOrEmpty(model.Phone) ||
+                       string.IsNullOrEmpty(model.FirstName) ||
+                       string.IsNullOrEmpty(model.LastName) ||
+                       !model.Email.Contains('.') ||
+                       !model.Email.Contains('@') ||
+                       model.Email.Length < 4 ||
+                       model.Email.IndexOfAny(new[] { '.', '@'}) == 0 ||
+                       model.Email.IndexOfAny(new[] { '.', '@' }) == model.Email.Length - 1 ||
+                       (model.Phone.Length !=11 && model.Phone.Length != 12) ||
+                       (model.Phone[0] != '8' && model.Phone[0] != '+')
+                       )
+                    return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
                 using (var db = new TaskTrackerEntities()) {
-                    if (string.IsNullOrEmpty(model.Email) ||
-                        string.IsNullOrEmpty(model.Phone) ||
-                        string.IsNullOrEmpty(model.FirstName) ||
-                        string.IsNullOrEmpty(model.LastName)
-                     )
-                        return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
 
-                    var user = db.UserProfiles.FirstOrDefault(a => a.Email == model.Email);
+                    var user = db.UserProfiles.FirstOrDefault(a => a.Email == model.Email ||
+                                                        a.Phone == model.Phone);
                     if (user != null) return new InternalResultModel(StatusCodeEnum.EmailAlreadyUsed);
 
                     var apikey = CommonManager.GetRandomString(15);
@@ -32,10 +39,10 @@ namespace TrackerLib.Managers {
                     var md5 = MD5.Create();
 
                     byte[] data = md5.ComputeHash(Encoding.UTF8.GetBytes(password));
-                   
+
                     var sBuilder = new StringBuilder();
                     for (int i = 0; i < data.Length; i++) {
-                        sBuilder.Append(data[i].ToString("x2"));
+                        sBuilder.Append(data[i].ToString());
                     }
 
                     var hash = sBuilder.ToString();
@@ -43,11 +50,11 @@ namespace TrackerLib.Managers {
 
                     return new InternalResultModel(StatusCodeEnum.Success, password);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
-
 
         /// <summary>
         /// авторизация пользователя
@@ -55,18 +62,26 @@ namespace TrackerLib.Managers {
         public static InternalResultModel AuthUser() {
             try {
 
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
             return null;
         }
-
+        /// <summary>
+        /// получаем информацию по всем активным пользователям
+        /// </summary>
         public static InternalResultModel GetUsersList() {
             try {
                 using (var db = new TaskTrackerEntities()) {
-                    return null;
+                    var users = db.UserProfiles.Where(a => !a.IsDeleted).ToList();
+                    var result = new List<InternalUserModel>();
+                    users.ForEach(user => result.Add(new InternalUserModel(db, user)));
+
+                    return new InternalResultModel(StatusCodeEnum.Success, result);
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }
@@ -76,12 +91,41 @@ namespace TrackerLib.Managers {
         public static InternalResultModel GetUserInfo(int userId) {
             try {
                 using (var db = new TaskTrackerEntities()) {
-                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
+                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId && !a.IsDeleted);
                     if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
                     var userModel = new InternalUserModel(db, user);
                     return new InternalResultModel(StatusCodeEnum.Success, userModel);
                 }
-            } catch(Exception ex) {
+            }
+            catch (Exception ex) {
+                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
+            }
+        }
+        /// <summary>
+        /// удаляем аккаунт пользователя
+        /// </summary>
+        public static InternalResultModel DeleteUserInfo(int userId, int adminId) {
+            try {
+                using (var db = new TaskTrackerEntities()) {
+                    var user = db.UserProfiles.FirstOrDefault(a => a.UserId == userId);
+                    if (user == null) return new InternalResultModel(StatusCodeEnum.InputDataIsWrong);
+                    if (user.IsDeleted) return new InternalResultModel(StatusCodeEnum.DataAlreadyDeleted);
+                    user.IsDeleted = true;
+
+                    var tasks = db.Tasks
+                        .Where(a => a.UserId == user.UserId
+                    && a.TaskStatus != (int)TaskStatusEnum.Ready).ToList();
+
+                    tasks.ForEach(task =>
+                    {
+                        task.UserId = adminId;
+                    });
+                    db.SaveChanges();
+
+                    return new InternalResultModel(StatusCodeEnum.Success);
+                }
+            }
+            catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
         }

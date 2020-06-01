@@ -5,6 +5,18 @@ using System.Linq;
 using System.Web;
 
 namespace TaskTrackerBack.Models.InputModels {
+    public class ApiOuthUser {
+        [JsonProperty("login")]
+        public string Login { get; set; }
+        [JsonProperty("password")]
+        public string Password { get; set; }
+    }
+    public class ApiGetUserInfoByIdModel {
+        [JsonProperty("user_id")]
+        public int UserId { get; set; }
+        [JsonProperty("apikey")]
+        public string Apikey { get; set; }
+    }
     public class ApiCreateUserAccModel {
         [JsonProperty("phone")]
         public string Phone { get; set; }

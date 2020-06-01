@@ -19,6 +19,7 @@ namespace TrackerLib
         {
             this.Timesheets = new HashSet<Timesheets>();
             this.UserToProjects = new HashSet<UserToProjects>();
+            this.Tasks = new HashSet<Tasks>();
         }
     
         public int ProjectId { get; set; }
@@ -33,5 +34,7 @@ namespace TrackerLib
         public virtual ICollection<Timesheets> Timesheets { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<UserToProjects> UserToProjects { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Tasks> Tasks { get; set; }
     }
 }

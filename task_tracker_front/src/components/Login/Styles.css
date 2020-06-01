@@ -1,4 +1,14 @@
 /* Demo Background */
+.form_size {
+    padding-left: 20%;
+    padding-right: 20%;
+    padding-top: 10%;
+}
+
+.form_font_characters {
+    font-size: x-large;
+    font-weight: bold;
+}
 
 .auth-window{
     padding-top: 13%;

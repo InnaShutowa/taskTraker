@@ -1,50 +1,85 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { connect } from 'react-redux';
+
+import * as css from "./Styles.css";
+import ActionTypes from '../../store/Actions/index.js';
+import { Redirect } from 'react-router-dom';
 
 
+class CreateProjectModal extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: "",
+            description: ""
+        };
+    }
 
-const CreateProjectModal = (props) => {
-    return (
-        <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-        >
-            <Modal.Header closeButton>
-                <Modal.Title id="contained-modal-title-vcenter">
-                    Создание проекта
-                </Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <Form>
-                    <Form.Group controlId="name">
-                        <Form.Label>Название</Form.Label>
-                        <Form.Control placeholder="Название проекта" />
-                    </Form.Group>
+    handlerName = (event) => {
+        this.setState({name: event.target.value})
+    }
 
-                    <Form.Group controlId="description">
-                        <Form.Label>Описание</Form.Label>
-                        <Form.Control placeholder="Описание" />
-                    </Form.Group>
+    handlerDescr = (event) => {
+        this.setState({description: event.target.value});
+    }
 
-                    <Form.Group controlId="birthday">
-                        <Form.Label>Дата рождения</Form.Label>
-                        <Form.Control placeholder="Др" />
-                    </Form.Group>
+    render() {
+        return (
+            <Modal
+                show={this.props.show}
+                onHide={this.props.onHide}
+                size="lg"
+                aria-labelledby="contained-modal-title-vcenter"
+                centered
+            >
+                <Modal.Header closeButton>
+                    <Modal.Title id="contained-modal-title-vcenter">
+                        Создание проекта
+                    </Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        
+                        <Form.Group controlId="name">
+                            <Form.Label>
+                                <div className="inline_elements">
+                                    <div className="elements">Название</div>
+                                    <div style={{color: "red"}} className="elements">*</div>
+                                </div>
 
-                </Form>
-            </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={props.onHide} variant="primary" type="submit">
-                    Сохранить
-                </Button>
-                <Button onClick={props.onHide}>Закрыть</Button>
-            </Modal.Footer>
-        </Modal>
-    );
+                            </Form.Label>
+                            <Form.Control onChange={this.handlerName} placeholder="Название проекта" />
+                        </Form.Group>
+
+                        <Form.Group controlId="description">
+                            <Form.Label>Описание</Form.Label>
+                            <Form.Control  onChange={this.handlerDescr} placeholder="Описание" />
+                        </Form.Group>
+
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button 
+                    onClick={()=>this.props.onSave(this.state.name, this.state.description)} 
+                    variant="primary" 
+                    type="submit">
+                        Сохранить
+                    </Button>
+                    <Button onClick={this.props.onHide}>Закрыть</Button>
+                </Modal.Footer>
+            </Modal>
+        );
+    };
 }
 
-export default CreateProjectModal;
+
+
+const mapStateToProps = (state) => ({
+    name: state.name,
+    description: state.description
+});
+
+export default connect (mapStateToProps, null) (CreateProjectModal);

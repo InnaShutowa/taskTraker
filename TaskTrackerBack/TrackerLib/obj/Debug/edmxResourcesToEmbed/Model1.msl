@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="TaskTrackerModelStoreContainer" CdmEntityContainer="TaskTrackerEntities">
+  <EntityContainerMapping StorageEntityContainer="Хранилище TaskTrackerModelContainer" CdmEntityContainer="TaskTrackerEntities">
     <EntitySetMapping Name="Projects">
       <EntityTypeMapping TypeName="TaskTrackerModel.Projects">
         <MappingFragment StoreEntitySet="Projects">
@@ -16,13 +16,21 @@
     <EntitySetMapping Name="Timesheets">
       <EntityTypeMapping TypeName="TaskTrackerModel.Timesheets">
         <MappingFragment StoreEntitySet="Timesheets">
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
           <ScalarProperty Name="TimesheetId" ColumnName="TimesheetId" />
           <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="Time" ColumnName="Time" />
           <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="DayOfWeek" ColumnName="DayOfWeek" />
-          <ScalarProperty Name="Status" ColumnName="Status" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserAuthData">
+      <EntityTypeMapping TypeName="TaskTrackerModel.UserAuthData">
+        <MappingFragment StoreEntitySet="UserAuthData">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+          <ScalarProperty Name="Apikey" ColumnName="Apikey" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -30,7 +38,8 @@
       <EntityTypeMapping TypeName="TaskTrackerModel.UserProfiles">
         <MappingFragment StoreEntitySet="UserProfiles">
           <ScalarProperty Name="UserId" ColumnName="UserId" />
-          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
           <ScalarProperty Name="BirthDate" ColumnName="BirthDate" />
           <ScalarProperty Name="Email" ColumnName="Email" />
           <ScalarProperty Name="Phone" ColumnName="Phone" />
@@ -39,20 +48,30 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <AssociationSetMapping Name="UserToProject" TypeName="TaskTrackerModel.UserToProject" StoreEntitySet="UserToProject">
-      <EndProperty Name="Projects">
-        <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-      </EndProperty>
-      <EndProperty Name="UserProfiles">
-        <ScalarProperty Name="UserId" ColumnName="UserId" />
-      </EndProperty>
-    </AssociationSetMapping>
-    <EntitySetMapping Name="UserAuthData">
-      <EntityTypeMapping TypeName="TaskTrackerModel.UserAuthData">
-        <MappingFragment StoreEntitySet="UserAuthData">
-          <ScalarProperty Name="Apikey" ColumnName="Apikey" />
-          <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+    <EntitySetMapping Name="UserToProjects">
+      <EntityTypeMapping TypeName="TaskTrackerModel.UserToProjects">
+        <MappingFragment StoreEntitySet="UserToProjects">
+          <ScalarProperty Name="UserToProjectsId" ColumnName="UserToProjectsId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="IsOwner" ColumnName="IsOwner" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Tasks">
+      <EntityTypeMapping TypeName="TaskTrackerModel.Tasks">
+        <MappingFragment StoreEntitySet="Tasks">
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="TaskStatus" ColumnName="TaskStatus" />
+          <ScalarProperty Name="CreaterId" ColumnName="CreaterId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="DateFinished" ColumnName="DateFinished" />
+          <ScalarProperty Name="DeadlineDeta" ColumnName="DeadlineDeta" />
+          <ScalarProperty Name="DateCreate" ColumnName="DateCreate" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="TaskId" ColumnName="TaskId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

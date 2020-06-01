@@ -13,8 +13,9 @@ namespace TaskTrackerBack.Controllers {
     public class UserController : ApiController {
         // GET: User
         [HttpGet]
-        public object Get() {
-            return null;
+        public object Get(string apikey) {
+            var result = ApiUserManager.GetUsersList(apikey);
+            return result;
         }
 
         [HttpPost]

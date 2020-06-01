@@ -19,7 +19,7 @@ namespace TaskTrackerBack.Controllers {
         [HttpGet]
         public object Get(string apikey) {
             var result = ApiProjectManager.GetProjectsList(apikey);
-            return null;
+            return result;
         }
 
         [HttpOptions]

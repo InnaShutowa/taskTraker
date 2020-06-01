@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="471e6c5da9454ac38a74caa8f65cd5dc" Name="Diagram1" ZoomLevel="72">
+        <EntityTypeShape EntityType="TaskTrackerModel.Projects" Width="1.5" PointX="4.625" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TaskTrackerModel.Timesheets" Width="1.5" PointX="6.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TaskTrackerModel.UserAuthData" Width="1.5" PointX="4.625" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TaskTrackerModel.UserProfiles" Width="1.5" PointX="2.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TaskTrackerModel.UserToProjects" Width="1.5" PointX="8.25" PointY="3.75" IsExpanded="true" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Projects_UserProfiles" ManuallyRouted="false" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Timesheets_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="TaskTrackerModel.FK_UserToProjects_Projects" ManuallyRouted="false" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Timesheets_UserProfiles" ManuallyRouted="false" />
+        <AssociationConnector Association="TaskTrackerModel.FK_UserAuthData_UserProfiles" ManuallyRouted="false" />
+        <AssociationConnector Association="TaskTrackerModel.FK_UserToProjects_UserProfiles" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="TaskTrackerModel.Tasks" Width="1.5" PointX="0.5" PointY="3.25" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Tasks_Tasks" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Tasks_UserProfiles" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Timesheets_Tasks" />
+        <AssociationConnector Association="TaskTrackerModel.FK_Tasks_Projects" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

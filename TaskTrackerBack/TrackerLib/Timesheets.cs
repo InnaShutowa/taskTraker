@@ -19,10 +19,10 @@ namespace TrackerLib
         public int Time { get; set; }
         public int ProjectId { get; set; }
         public int UserId { get; set; }
-        public int DayOfWeek { get; set; }
-        public int Status { get; set; }
+        public int TaskId { get; set; }
     
         public virtual Projects Projects { get; set; }
         public virtual UserProfiles UserProfiles { get; set; }
+        public virtual Tasks Tasks { get; set; }
     }
 }

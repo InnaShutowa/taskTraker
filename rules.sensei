@@ -1,0 +1,11 @@
+rules:
+  csharp:
+    rules:
+    - id: rule_05ca5edb_0222_485e_b515_8943eed5f18e
+      name: New rule
+      search:
+        methodcall: {}
+      fix:
+        title: ''
+id: ruleset_9d1c947a_f2aa_4c74_9055_01ea83aae37b
+prefix: fiasko

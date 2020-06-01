@@ -1,30 +1,30 @@
 let initialState = {
-    user: [
-        {
-            id: 1,
-            name: 'Сова',
-            url: "SOVA_CONST",
-            likes: 5,
-            currentUserRating: 0,
-            date:1557781012,
-            user: 'Inna'
-        }
-    ],
-    isOpenModal: false
+    user: {
+        user_id: 1,
+        is_admin: false,
+        apikey: ""
+    }
 };
 
 function UserReducer(state = initialState, action) {
-    if (handlers[action.type]){
+    if (handlers[action.type]) {
         return handlers[action.type].handler(state, action);
     }
     return state;
 }
 
 
-const handlers  = {
-    "to_do" : {
-         handler(state, action){
-            return {...state};
+const handlers = {
+    "SET_DATA": {
+        handler(state, action) {
+            console.log(action);
+            state = {
+                ...state,
+                user_id: action.data.user_id,
+                is_admin: action.data.is_admin,
+                apikey: action.data.apikey
+            };
+            return { ...state };
         }
     }
 };

@@ -5,10 +5,3 @@
     padding-left: 24%;
 }
 
-.back {
-    background-color: rgba(10, 2, 2, 0.6);
-    background:  url(../../assets/back.jpg) no-repeat;
-    background-size: 100%;
-    background-blend-mode: multiply;
-    height: 100vh;
-}

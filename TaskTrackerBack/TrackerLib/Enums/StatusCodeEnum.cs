@@ -10,9 +10,13 @@ namespace TrackerLib.Enums {
         ApikeyIsWrong = 502,
         [Description("Error! Input data is incorrect.")]
         InputDataIsWrong = 503,
-        [Description("Error! Project already deleted.")]
-        ProjectAlreadyDeleted = 504,
+        [Description("Error! Data already deleted.")]
+        DataAlreadyDeleted = 504,
         [Description("Error! Email already used.")]
-        EmailAlreadyUsed = 505
+        EmailAlreadyUsed = 505,
+        [Description("Error! There aren't enought rules.")]
+        NoRules = 506,
+        [Description("Error! User already in project.")]
+        UserAlreadyInProject = 507
     }
 }

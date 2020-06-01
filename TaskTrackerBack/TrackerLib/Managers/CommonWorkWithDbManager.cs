@@ -57,7 +57,7 @@ namespace TrackerLib.Managers {
                     };
                     db.UserToProjects.Add(newUserToProject);
                     db.SaveChanges();
-                    return new InternalResultModel(StatusCodeEnum.Success, newUserToProject);
+                    return new InternalResultModel(StatusCodeEnum.Success);
                 }
             } catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
@@ -96,19 +96,6 @@ namespace TrackerLib.Managers {
             } catch (Exception ex) {
                 return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
             }
-        }
-        /// <summary>
-        /// добавляем инфу о пользовательских авторизационных данных
-        /// </summary>
-        public static InternalResultModel CreateUserAuthModel() {
-            try {
-                using (var db = new TaskTrackerEntities()) {
-
-                }
-            } catch (Exception ex) {
-                return new InternalResultModel(ex.Message, StatusCodeEnum.InternalServerError);
-            }
-            return null;
         }
     }
 }
